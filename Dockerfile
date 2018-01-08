@@ -12,6 +12,7 @@ ENV PIO_USER pio
 ENV PATH=${PIO_HOME}/bin:$PATH
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
+# install dependencies.
 RUN apk add --update \
     curl \
     bash \
@@ -23,6 +24,7 @@ RUN apk add --update \
     sudo \
     && rm -rf /var/cache/apk/*
 
+# Create pio user.
 RUN addgroup -S ${PIO_USER}
 RUN adduser -S -G ${PIO_USER} -s /bin/bash ${PIO_USER} \
     && echo "${PIO_USER} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/${PIO_USER} \
@@ -46,6 +48,7 @@ RUN tar zxvf ${HOME}/apache-predictionio-${PIO_VERSION}-incubating/PredictionIO-
 
 COPY config/pio-env.sh ${PIO_HOME}/conf/pio-env.sh
 
+# Fix permissions
 RUN sudo chown -R ${PIO_USER}:${PIO_USER} ${PIO_HOME}/conf/pio-env.sh
 
 # Install Spark.
@@ -70,6 +73,7 @@ RUN cd ${HOME} \
 
 COPY config/hbase-site.xml ${PIO_HOME}/vendors/hbase-${HBASE_VERSION}/conf/hbase-site.xml
 
+# Fix permissions
 RUN sudo chown -R ${PIO_USER}:${PIO_USER} ${PIO_HOME}/vendors/hbase-${HBASE_VERSION}/conf/hbase-site.xml
 
 RUN sed -i "s|VAR_PIO_HOME|${PIO_HOME}|" ${PIO_HOME}/vendors/hbase-${HBASE_VERSION}/conf/hbase-site.xml \
@@ -77,4 +81,4 @@ RUN sed -i "s|VAR_PIO_HOME|${PIO_HOME}|" ${PIO_HOME}/vendors/hbase-${HBASE_VERSI
 
 WORKDIR ${PIO_HOME}
 
-CMD ["pio-start-all"]
+#CMD ["pio-start-all"]
