@@ -13,6 +13,9 @@ container:
 build:
 	fin docker build -t $(REPO):$(VERSION) .
 
+fresh-build:
+	fin docker build --no-cache -t $(REPO):$(VERSION) .
+
 test:
 	IMAGE=$(REPO):$(VERSION) NAME=$(NAME) tests/$(VERSION).bats
 

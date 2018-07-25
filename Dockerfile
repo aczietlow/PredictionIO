@@ -4,7 +4,7 @@ MAINTAINER Mindgrub
 ENV PIO_VERSION 0.12.0
 ENV SPARK_VERSION 2.1.1
 ENV ELASTICSEARCH_VERSION 5.5.2
-ENV HBASE_VERSION 1.2.6
+ENV HBASE_VERSION 1.2.6.1
 
 ENV HOME /home/pio
 ENV PIO_HOME ${HOME}/PredictionIO-${PIO_VERSION}-incubating
@@ -16,13 +16,14 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 RUN apk add --update \
     curl \
     bash \
-#    libgfortran3 \
-#    python \
-#    python-dev \
-#    py-pip \
-#    python-pip \
     sudo \
     && rm -rf /var/cache/apk/*
+
+#        libgfortran3 \
+#        python \
+#        python-dev \
+#        py-pip \
+#        python-pip \
 
 # Create pio user.
 RUN addgroup -S ${PIO_USER}
@@ -67,7 +68,7 @@ RUN cd ${HOME} \
 
 # Install Hbase
 RUN cd ${HOME} \
-    && curl -O http://apache.mirrors.hoobly.com/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-bin.tar.gz \
+    && curl -O http://apache.cs.utah.edu/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-bin.tar.gz \
     && tar -xvzf hbase-${HBASE_VERSION}-bin.tar.gz -C ${PIO_HOME}/vendors \
     && rm hbase-${HBASE_VERSION}-bin.tar.gz
 
@@ -81,4 +82,4 @@ RUN sed -i "s|VAR_PIO_HOME|${PIO_HOME}|" ${PIO_HOME}/vendors/hbase-${HBASE_VERSI
 
 WORKDIR ${PIO_HOME}
 
-#CMD ["pio-start-all"]
+CMD ["pio-start-all"]
